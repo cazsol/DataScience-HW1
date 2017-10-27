@@ -10,25 +10,24 @@ higherBound = 2017
 HshareiOS = []
 HshareAndroid = []
 # AGGREGATES EVERY OBSERVATION TO THE LISTS DEFINED ABOVE
-def graph(dataFrame, ylabel=None, xlabel=None, labels=None, title=None, xmin=None,xmax=None):
-    #PLOTS THE DATAFRAME
+def graph(dataFrame, ylabel=None, xlabel=None, labels=None, title=None):
+    #pp.plot(dataFrame, label=labels)
     ax1 = dataFrame.plot()
-    # NAMES AXES
     pp.ylabel(ylabel)
     pp.xlabel(xlabel)
-    # HANDLES LINES AND LABELS
     lines, labels = ax1.get_legend_handles_labels()
-    # HANDLES LEGEND
     ax1.legend(lines, labels, loc='best', title=title)
-    # HANDLES AXES LIMITS
     axes = pp.gca()
-    axes.set_xlim([xmin,xmax])
-    # GRAPH
+    axes.set_xlim(["2007-10-01","2017-09-01"])
+    #axes.set_ylim([0,100])
+    #ax1.legend(lines[:2], labels[:2], loc='best')
+    #ax = pp.subplot(2, 1, 1)
+    #pp.legend(loc="upper left", bbox_to_anchor=[0, 1],
+    #    ncol=2, shadow=True, title="Legend", fancybox=True, label=labels)
+    #ax.get_legend().get_title().set_color("red")
     pp.show()
 def aggregator(listSent,OS):
-    # SEPARATE THE OBSERVATIONS IN THE LISTS
     monthlist = listSent.split(",")
-    # COLLECTS THE OBSERVATIONS IN THE CORRESPONFING LIST
     for x in monthlist:
         if OS == "iOS":
             HshareiOS.append(round(float(x),4)*100)
@@ -56,11 +55,14 @@ def collector():
         aggregator(yearlyiOSShare,"iOS")
         aggregator(yearlyAndroidShare,"Android")
 def main():
-    collector() # STARTS COLLECTING INFORMATION
-    #CONVERTS INFORMATION INTO DATADRAMES
+    collector()
+    #matrix = np.matrix(HshareiOS,HshareAndroid)
+    #df = pd.DataFrame(data=matrix)
     d = pd.date_range(start='1/1/2007', end='09/1/2017', freq='MS')
     df = pd.DataFrame({'iOS':HshareiOS,'Android':HshareAndroid}, index=d)
     labels = ["iOS","Android"]
-    # CALLS FUNCTION TO GRAPH
-    graph(df,"Market share %","Timeline", labels, "Mobile/Tablet OS share",'2007-10-01','2017-09-01')
+    graph(df,"Market share %","Year", labels, "Market share")
+"""
+THIS IS NOT THE FINAL DRAFT i MESSED UP
+"""
 main()
