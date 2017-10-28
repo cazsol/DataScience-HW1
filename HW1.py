@@ -43,6 +43,7 @@ def aggregator(listSent,OS):
             HshareAndroid.append(round(float(x),4)*100)
 # CREATES LOOP TO MAKE THE REQUESTS FOR INFORMATION PER YEAR
 def collector():
+    processMonitor = 0
     for i in range(lowerBound,higherBound+1):
         url = 'https://www.netmarketshare.com/operating-system-market-share.aspx?qprid=9&qpcustomb=1&qpsp={0}&qpnp=1&qptimeframe=Y'.format(i)
         H = requests.get(url, verify=False)
@@ -62,7 +63,11 @@ def collector():
         yearlyAndroidShare = datafiltered[sectionStartAndroid:sectionEndAndroid]
         aggregator(yearlyiOSShare,"iOS")
         aggregator(yearlyAndroidShare,"Android")
+        processMonitor += 1
+        progress = round(processMonitor/len(range(lowerBound,higherBound+1))*100,2)
+        print(str(progress)+"% progress")
 def main():
+    print("Script started")
     collector() # STARTS COLLECTING INFORMATION
     #CONVERTS INFORMATION INTO DATADRAMES
     d = pd.date_range(start='1/1/2007', end='09/1/2017', freq='MS')
